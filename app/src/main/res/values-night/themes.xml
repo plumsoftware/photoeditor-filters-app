@@ -1,0 +1,96 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.Фоторедактор" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!--        &lt;!&ndash; Primary brand color. &ndash;&gt;-->
+        <!--        <item name="colorPrimary">@color/purple_200</item>-->
+        <!--        <item name="colorPrimaryVariant">@color/purple_700</item>-->
+        <!--        <item name="colorOnPrimary">@color/black</item>-->
+        <!--        &lt;!&ndash; Secondary brand color. &ndash;&gt;-->
+        <!--        <item name="colorSecondary">@color/teal_200</item>-->
+        <!--        <item name="colorSecondaryVariant">@color/teal_200</item>-->
+        <!--        <item name="colorOnSecondary">@color/black</item>-->
+        <!--        &lt;!&ndash; Status bar color. &ndash;&gt;-->
+        <!--        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>-->
+        <!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+        <item name="colorPrimary">@color/md_theme_dark_primary</item>
+        <item name="colorOnPrimary">@color/md_theme_dark_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/md_theme_dark_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/md_theme_dark_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/md_theme_dark_secondary</item>
+        <item name="colorOnSecondary">@color/md_theme_dark_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/md_theme_dark_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/md_theme_dark_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/md_theme_dark_tertiary</item>
+        <item name="colorOnTertiary">@color/md_theme_dark_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/md_theme_dark_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/md_theme_dark_onTertiaryContainer</item>
+        <item name="colorError">@color/md_theme_dark_error</item>
+        <item name="colorErrorContainer">@color/md_theme_dark_errorContainer</item>
+        <item name="colorOnError">@color/md_theme_dark_onError</item>
+        <item name="colorOnErrorContainer">@color/md_theme_dark_onErrorContainer</item>
+        <!--        <item name="android:colorBackground">@color/md_theme_dark_background</item>-->
+        <item name="android:colorBackground">@color/back</item>
+        <item name="colorOnBackground">@color/md_theme_dark_onBackground</item>
+        <item name="colorSurface">@color/md_theme_dark_surface</item>
+        <item name="colorOnSurface">@color/md_theme_dark_onSurface</item>
+        <item name="colorSurfaceVariant">@color/md_theme_dark_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/md_theme_dark_onSurfaceVariant</item>
+        <item name="colorOutline">@color/md_theme_dark_outline</item>
+        <item name="colorOnSurfaceInverse">@color/md_theme_dark_inverseOnSurface</item>
+        <item name="colorSurfaceInverse">@color/md_theme_dark_inverseSurface</item>
+        <item name="colorPrimaryText">#FFFFFF</item>
+        <!--        <item name="colorPrimaryText">#4fd8eb</item>-->
+        <item name="colorOnPrimaryText">#00363d</item>
+        <item name="colorPrimaryTextContainer">#004f58</item>
+        <item name="colorOnPrimaryTextContainer">#97f0ff</item>
+        <item name="harmonizePrimaryText">false</item>
+        <item name="colorSecondaryText">#4fd8eb</item>
+        <item name="colorOnSecondaryText">#00363d</item>
+        <item name="colorSecondaryTextContainer">#004f58</item>
+        <item name="colorOnSecondaryTextContainer">#97f0ff</item>
+        <item name="harmonizeSecondaryText">false</item>
+        <item name="colorLandingBackgroundCenter">#ffb1c8</item>
+        <item name="colorOnLandingBackgroundCenter">#5e1133</item>
+        <item name="colorLandingBackgroundCenterContainer">#7b2949</item>
+        <item name="colorOnLandingBackgroundCenterContainer">#ffd9e2</item>
+        <item name="harmonizeLandingBackgroundCenter">false</item>
+        <item name="colorLandingBackgroundEnd">#ffb1c8</item>
+        <item name="colorOnLandingBackgroundEnd">#5e1133</item>
+        <item name="colorLandingBackgroundEndContainer">#7b2949</item>
+        <item name="colorOnLandingBackgroundEndContainer">#ffd9e2</item>
+        <item name="harmonizeLandingBackgroundEnd">false</item>
+        <item name="colorButtonSavedImages">#8ad88e</item>
+        <item name="colorOnButtonSavedImages">#003911</item>
+        <item name="colorButtonSavedImagesContainer">#00531c</item>
+        <item name="colorOnButtonSavedImagesContainer">#a6f5a8</item>
+        <item name="harmonizeButtonSavedImages">false</item>
+        <item name="colorButtonEditNewImages">#ffb954</item>
+        <item name="colorOnButtonEditNewImages">#452b00</item>
+        <item name="colorButtonEditNewImagesContainer">#633f00</item>
+        <item name="colorOnButtonEditNewImagesContainer">#ffddb4</item>
+        <item name="harmonizeButtonEditNewImages">false</item>
+        <item name="colorWhite">#4fd8eb</item>
+        <item name="colorOnWhite">#00363d</item>
+        <item name="colorWhiteContainer">#004f58</item>
+        <item name="colorOnWhiteContainer">#97f0ff</item>
+        <item name="harmonizeWhite">false</item>
+        <item name="colorPrimaryInverse">@color/md_theme_dark_inversePrimary</item>
+
+        <item name="android:statusBarColor" tools:targetApi="lollipop">
+            ?android:attr/colorBackground
+        </item>
+        <item name="android:windowLightStatusBar" tools:ignore="NewApi">false</item>
+
+        <item name="android:navigationBarColor" tools:ignore="NewApi">
+            ?android:attr/colorBackground
+        </item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
+    </style>
+
+    <style name="FullScreen" parent="Theme.Фоторедактор">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+</resources>

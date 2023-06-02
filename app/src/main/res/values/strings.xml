@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Фоторедактор</string>
+    <string name="text1">Давайте создадим что-то новенькое</string>
+    <string name="text2">Фильтры для изображений</string>
+</resources>
