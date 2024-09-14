@@ -13,6 +13,8 @@ import androidx.annotation.RequiresApi
 import com.yandex.mobile.ads.common.*
 import com.yandex.mobile.ads.interstitial.InterstitialAd
 import com.yandex.mobile.ads.interstitial.InterstitialAdEventListener
+import com.yandex.mobile.ads.interstitial.InterstitialAdLoadListener
+import com.yandex.mobile.ads.interstitial.InterstitialAdLoader
 import ru.plumsoftware.photoeditor.R
 import ru.plumsoftware.photoeditor.activities.editimage.EditImageActivity
 import ru.plumsoftware.photoeditor.databinding.ActivityFilteredImageBinding
@@ -66,12 +68,8 @@ class FilteredImageActivity : AppCompatActivity() {
     private fun showAds(context: Context) {
         val progressDialog = ProgressDialog(context)
         progressDialog.showDialog()
-        interstitialAd?.setInterstitialAdEventListener(object : InterstitialAdEventListener {
-            override fun onAdLoaded() {
-                progressDialog.dismissDialog()
-                interstitialAd?.show()
-            }
-
+        val interstitialAdLoader = InterstitialAdLoader(context)
+        interstitialAdLoader.setAdLoadListener(object: InterstitialAdLoadListener {
             override fun onAdFailedToLoad(error: AdRequestError) {
                 progressDialog.dismissDialog()
                 displayToast(error.description.toString())
@@ -79,46 +77,45 @@ class FilteredImageActivity : AppCompatActivity() {
                 overridePendingTransition(0, 0)
             }
 
-            override fun onAdShown() {
-
-            }
-
-            override fun onAdDismissed() {
+            override fun onAdLoaded(interstitialAd: InterstitialAd) {
                 progressDialog.dismissDialog()
-                finish()
-                overridePendingTransition(0, 0)
+
+                interstitialAd.setAdEventListener(object : InterstitialAdEventListener {
+                    override fun onAdClicked() {
+
+                    }
+
+                    override fun onAdDismissed() {
+                        finish()
+                        overridePendingTransition(0, 0)
+                    }
+
+                    override fun onAdFailedToShow(adError: AdError) {
+
+                    }
+
+                    override fun onAdImpression(impressionData: ImpressionData?) {
+
+                    }
+
+                    override fun onAdShown() {
+
+                    }
+                })
+                interstitialAd.show(activity = this@FilteredImageActivity)
             }
 
-            override fun onAdClicked() {
-
-            }
-
-            override fun onLeftApplication() {
-
-            }
-
-            override fun onReturnedToApplication() {
-
-            }
-
-            override fun onImpression(data: ImpressionData?) {
-
-            }
         })
-        interstitialAd?.loadAd(adRequest!!)
+        val adRequestConfiguration: AdRequestConfiguration = AdRequestConfiguration.Builder("R-M-2416472-1").build()
+        interstitialAdLoader.loadAd(adRequestConfiguration)
     }
 
     private fun initAds(context: Context) {
-        MobileAds.initialize(context, object : InitializationListener {
-            override fun onInitializationCompleted() {
-                interstitialAd = InterstitialAd(context)
-                interstitialAd?.setAdUnitId("R-M-2416472-1")
-                adRequest = AdRequest.Builder().build()
-            }
-
-        })
+        MobileAds.initialize(context) {}
     }
 
+    @Deprecated("Deprecated in Java")
+    @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
         showAds(this)
     }
