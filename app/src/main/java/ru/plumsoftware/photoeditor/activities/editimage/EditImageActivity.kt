@@ -9,11 +9,12 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import com.yandex.mobile.ads.common.*
 import com.yandex.mobile.ads.interstitial.InterstitialAd
 import com.yandex.mobile.ads.interstitial.InterstitialAdEventListener
+import com.yandex.mobile.ads.interstitial.InterstitialAdLoadListener
+import com.yandex.mobile.ads.interstitial.InterstitialAdLoader
 import jp.co.cyberagent.android.gpuimage.GPUImage
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.plumsoftware.photoeditor.activities.filteredimage.FilteredImageActivity
@@ -37,10 +38,6 @@ class EditImageActivity : AppCompatActivity(), ImageFilterListener {
     private val viewModel: EditImageViewModel by viewModel()
     private lateinit var gpuImage: GPUImage
 
-    //    Ads
-    private var interstitialAd: InterstitialAd? = null
-    private var adRequest: AdRequest? = null
-
     //    Image bitmaps
     private lateinit var originalBitmap: Bitmap
     private val filteredBitmap = MutableLiveData<Bitmap>()
@@ -57,7 +54,7 @@ class EditImageActivity : AppCompatActivity(), ImageFilterListener {
     }
 
     private fun setupObservers() {
-        viewModel.imagePreviewUiState.observe(this, {
+        viewModel.imagePreviewUiState.observe(this) {
             val dataState = it ?: return@observe
             binding.previewProgressBar.visibility =
                 if (dataState.isLoading) View.VISIBLE else View.GONE
@@ -76,9 +73,9 @@ class EditImageActivity : AppCompatActivity(), ImageFilterListener {
                     displayToast(error)
                 }
             }
-        })
+        }
 
-        viewModel.imageFiltersUiState.observe(this, {
+        viewModel.imageFiltersUiState.observe(this) {
             val imageFiltersDataState = it ?: return@observe
             binding.imageFiltersProgressBar.visibility =
                 if (imageFiltersDataState.isLoading) View.VISIBLE else View.GONE
@@ -91,13 +88,13 @@ class EditImageActivity : AppCompatActivity(), ImageFilterListener {
                     displayToast(error)
                 }
             }
-        })
+        }
 
-        filteredBitmap.observe(this, { bitmap ->
+        filteredBitmap.observe(this) { bitmap ->
             binding.imagePreview.setImageBitmap(bitmap)
-        })
+        }
 
-        viewModel.saveFilteredImageUiState.observe(this, {
+        viewModel.saveFilteredImageUiState.observe(this) {
             val saveFilteredImageDataState = it ?: return@observe
             if (saveFilteredImageDataState.isLoading) {
                 binding.imageSave.visibility = View.GONE
@@ -107,7 +104,6 @@ class EditImageActivity : AppCompatActivity(), ImageFilterListener {
                 binding.imageSave.visibility = View.VISIBLE
             }
             saveFilteredImageDataState.uri?.let { savedImageUri ->
-//                Toast.makeText(this, savedImageUri.toString(), Toast.LENGTH_LONG).show()
                 Intent(
                     applicationContext,
                     FilteredImageActivity::class.java
@@ -122,7 +118,7 @@ class EditImageActivity : AppCompatActivity(), ImageFilterListener {
                     displayToast(error)
                 }
             }
-        })
+        }
     }
 
     private fun prepareImagePreview() {
@@ -163,12 +159,8 @@ class EditImageActivity : AppCompatActivity(), ImageFilterListener {
     private fun showAds(context: Context) {
         val progressDialog = ProgressDialog(context)
         progressDialog.showDialog()
-        interstitialAd?.setInterstitialAdEventListener(object : InterstitialAdEventListener {
-            override fun onAdLoaded() {
-                progressDialog.dismissDialog()
-                interstitialAd?.show()
-            }
-
+        val interstitialAdLoader = InterstitialAdLoader(context)
+        interstitialAdLoader.setAdLoadListener(object: InterstitialAdLoadListener {
             override fun onAdFailedToLoad(error: AdRequestError) {
                 progressDialog.dismissDialog()
                 displayToast(error.description.toString())
@@ -176,33 +168,37 @@ class EditImageActivity : AppCompatActivity(), ImageFilterListener {
                 overridePendingTransition(0, 0)
             }
 
-            override fun onAdShown() {
-
-            }
-
-            override fun onAdDismissed() {
+            override fun onAdLoaded(interstitialAd: InterstitialAd) {
                 progressDialog.dismissDialog()
-                finish()
-                overridePendingTransition(0, 0)
+
+                interstitialAd.setAdEventListener(object : InterstitialAdEventListener {
+                    override fun onAdClicked() {
+
+                    }
+
+                    override fun onAdDismissed() {
+                        finish()
+                        overridePendingTransition(0, 0)
+                    }
+
+                    override fun onAdFailedToShow(adError: AdError) {
+
+                    }
+
+                    override fun onAdImpression(impressionData: ImpressionData?) {
+
+                    }
+
+                    override fun onAdShown() {
+
+                    }
+                })
+                interstitialAd.show(activity = this@EditImageActivity)
             }
 
-            override fun onAdClicked() {
-
-            }
-
-            override fun onLeftApplication() {
-
-            }
-
-            override fun onReturnedToApplication() {
-
-            }
-
-            override fun onImpression(data: ImpressionData?) {
-
-            }
         })
-        interstitialAd?.loadAd(adRequest!!)
+        val adRequestConfiguration: AdRequestConfiguration = AdRequestConfiguration.Builder("R-M-2416472-1").build()
+        interstitialAdLoader.loadAd(adRequestConfiguration)
     }
 
     override fun onFilterSelected(imageFilter: ImageFilter) {
@@ -215,16 +211,11 @@ class EditImageActivity : AppCompatActivity(), ImageFilterListener {
     }
 
     private fun initAds(context: Context) {
-        MobileAds.initialize(context, object : InitializationListener {
-            override fun onInitializationCompleted() {
-                interstitialAd = InterstitialAd(context)
-                interstitialAd?.setAdUnitId("R-M-2416472-1")
-                adRequest = AdRequest.Builder().build()
-            }
-
-        })
+        MobileAds.initialize(context) {}
     }
 
+    @Deprecated("Deprecated in Java")
+    @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
         showAds(this)
     }
